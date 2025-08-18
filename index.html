@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凌逍科学会 | 探索无限可能</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --secondary: #ff00c8;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #e0e0ff;
+            --accent: #00ff9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 200, 0.05) 0%, transparent 20%);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            background: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+        
+        .logo-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+        
+        .logo-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .active {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 70%),
+                linear-gradient(135deg, rgba(10, 10, 26, 0.9) 0%, rgba(5, 5, 16, 0.9) 100%);
+            z-index: -1;
+        }
+        
+        .hero-content {
+            max-width: 700px;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--darker);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.7);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+        }
+        
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.8rem;
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .about-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            font-size: 1rem;
+            color: var(--light);
+        }
+        
+        .about-image {
+            flex: 1;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 243, 255, 0.2), rgba(255, 0, 200, 0.2));
+            pointer-events: none;
+        }
+        
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .project-card {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 243, 255, 0.2);
+            border-color: rgba(0, 243, 255, 0.5);
+        }
+        
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+        
+        .project-content {
+            padding: 25px;
+        }
+        
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .project-content p {
+            margin-bottom: 20px;
+            color: #b0b0ff;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tag {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        /* Schedule Section */
+        .schedule-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .schedule-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .schedule-tab {
+            padding: 12px 25px;
+            background: rgba(20, 20, 40, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 30px;
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .schedule-tab.active, .schedule-tab:hover {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--darker);
+            border-color: var(--primary);
+        }
+        
+        .schedule-content {
+            display: none;
+        }
+        
+        .schedule-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .schedule-item {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .schedule-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 243, 255, 0.5);
+        }
+        
+        .schedule-time {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .time-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .time-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        
+        .schedule-item h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .schedule-item p {
+            margin-bottom: 15px;
+            color: #b0b0ff;
+        }
+        
+        .schedule-location {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+        
+        /* Events Section */
+        .events-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .events-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            padding-right: calc(50% + 30px);
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) {
+            padding-left: calc(50% + 30px);
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--darker);
+            border: 4px solid var(--primary);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            background: rgba(20, 20, 40, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .timeline-content h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .timeline-date {
+            display: inline-block;
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Members Section */
+        .department-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 40px 0 20px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .member-card {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 243, 255, 0.5);
+        }
+        
+        .member-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .member-info {
+            padding: 25px 20px;
+        }
+        
+        .member-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .member-role {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .member-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: var(--darker);
+            transform: translateY(-3px);
+        }
+        
+        /* Contact Section */
+        .contact-container {
+            display: flex;
+            gap: 50px;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+        
+        .contact-details {
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .contact-text h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-form {
+            flex: 1;
+            background: rgba(20, 20, 40, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(5, 5, 16, 0.9);
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #b0b0ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary);
+            color: var(--darker);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .footer-logo {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .footer-logo .logo-badge {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            font-size: 2rem;
+        }
+        
+        .footer-logo .logo-text {
+            font-size: 2.5rem;
+            margin-top: 15px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .modal-content p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 26, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                border-top: 1px solid rgba(0, 243, 255, 0.2);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .about-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding: 0 40px;
+                text-align: left;
+            }
+            
+            .events-timeline::before {
+                left: 40px;
+            }
+            
+            .timeline-marker {
+                left: 40px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+            
+            .projects-grid,
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-badge">
+                    <img src="files/凌逍科学会社徽（现）.jpg" alt="凌逍科学会社徽">
+                </div>
+                <div class="logo-text">凌逍科学会</div>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">首页</a></li>
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#projects">项目展示</a></li>
+                    <li><a href="#schedule">课程安排</a></li>
+                    <li><a href="#events">活动日历</a></li>
+                    <li><a href="#members">成员</a></li>
+                    <li><a href="#contact">联系我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>探索无限科学可能</h1>
+                <p>凌逍科学会致力于激发学生对科学的兴趣，培养创新思维和实践能力，通过丰富的科研项目和活动，引领青年探索科技前沿。</p>
+                <div class="hero-btns">
+                    <a href="#projects" class="btn">查看项目</a>
+                    <a href="#contact" class="btn btn-secondary">加入我们</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>关于我们</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>引领青年探索科学前沿</h3>
+                    <p>凌逍科学会成立于2023年，是学校富有影响力的科学社团。我们汇聚了学校的科学爱好者，共同探索科学的奥秘。</p>
+                    <p>社团以"激发科学兴趣，培养创新能力"为宗旨，定期举办科学讲座、上机学习、科技竞赛等活动，为成员提供展示才华的平台。</p>
+                    <p>凌逍科学会分为三个部门，分别是实践部、理论部、设计部，各部门职能不同，方向不同，彼此间联系紧密。</p>
+                    <p>我们的项目涵盖3D打印，建模设计，编程语言，AI应用等领域，在这个大平台定能收获不少东西</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">30+</div>
+                            <div class="stat-text">活跃成员</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">20+</div>
+                            <div class="stat-text">项目设计</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-text">获奖次数</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image floating">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="科学实验">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" style="background: rgba(5, 5, 16, 0.7);">
+        <div class="container">
+            <div class="section-title">
+                <h2>项目展示</h2>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="AI项目">
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag">实践部</span>
+                            <span class="tag">开发板设计</span>
+                            <span class="tag">程序设计</span>
+                        </div>
+                        <h3>基于ARDUINO手势控制的水下清洁作业机械臂</h3>
+                        <p>一款新型防水机械臂，能够应用于水域垃圾清理工作。</p>
+                        <a href="#" class="btn btn-secondary project-detail-btn" data-project="1">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1505506874110-6a7a69069a08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="机器人项目">
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag">理论部</span>
+                            <span class="tag">高等数学</span>
+                            <span class="tag">哲学</span>
+                        </div>
+                        <h3>等待补充</h3>
+                        <p>等待补充。</p>
+                        <a href="#" class="btn btn-secondary project-detail-btn" data-project="2">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="生物技术">
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag">设计部</span>
+                            <span class="tag">PS设计</span>
+                            <span class="tag">社团宣传</span>
+                        </div>
+                        <h3>等待补充</h3>
+                        <p>等待补充</p>
+                        <a href="#" class="btn btn-secondary project-detail-btn" data-project="3">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule">
+        <div class="container">
+            <div class="section-title">
+                <h2>课程安排</h2>
+            </div>
+            <div class="schedule-container">
+                <div class="schedule-tabs">
+                    <div class="schedule-tab active" data-tab="monday">周一</div>
+                    <div class="schedule-tab" data-tab="tuesday">周二</div>
+                    <div class="schedule-tab" data-tab="wednesday">周三</div>
+                    <div class="schedule-tab" data-tab="thursday">周四</div>
+                    <div class="schedule-tab" data-tab="friday">周五</div>
+                    <div class="schedule-tab" data-tab="weekend">周末</div>
+                </div>
+                
+                <div class="schedule-content active" id="monday-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">18:30 - 20:00</div>
+                            </div>
+                            <h3>人工智能基础</h3>
+                            <p>讲解机器学习基本概念、常用算法和实际应用案例，适合初学者入门。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>科学楼A101</span>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">20:30 - 22:00</div>
+                            </div>
+                            <h3>机器人技术研讨</h3>
+                            <p>深入探讨机器人控制系统设计、传感器应用和自主导航技术。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>工程实验楼B205</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="schedule-content" id="tuesday-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">19:00 - 21:00</div>
+                            </div>
+                            <h3>生物技术实验</h3>
+                            <p>基因工程实验操作，包括PCR扩增、电泳分析和载体构建等。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>生物实验楼301</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="schedule-content" id="wednesday-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">18:00 - 19:30</div>
+                            </div>
+                            <h3>科技创新讲座</h3>
+                            <p>邀请校内外专家分享最新科研成果和行业发展趋势。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>学术报告厅</span>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">20:00 - 21:30</div>
+                            </div>
+                            <h3>项目进展汇报</h3>
+                            <p>各项目组汇报研究进展，交流技术难题和解决方案。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>科学楼A301</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="schedule-content" id="thursday-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">18:30 - 20:00</div>
+                            </div>
+                            <h3>编程实践课</h3>
+                            <p>Python编程实战，涵盖数据分析、可视化和自动化脚本开发。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>计算机楼201</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="schedule-content" id="friday-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">19:00 - 21:00</div>
+                            </div>
+                            <h3>学术论文写作</h3>
+                            <p>科研论文结构、写作技巧和发表流程指导。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>图书馆研讨室</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="schedule-content" id="weekend-content">
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">周六 10:00 - 17:00</div>
+                            </div>
+                            <h3>科学探索营</h3>
+                            <p>全天候科学实践活动，包括实验室参观、专家座谈和技术工作坊。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>各实验室轮流</span>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="time-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="time-text">周日 14:00 - 16:00</div>
+                            </div>
+                            <h3>项目头脑风暴</h3>
+                            <p>新项目创意讨论和可行性分析，鼓励跨学科合作。</p>
+                            <div class="schedule-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>创新工坊</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" style="background: rgba(5, 5, 16, 0.7);">
+        <div class="container">
+            <div class="section-title">
+                <h2>活动日历</h2>
+            </div>
+            <div class="events-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023年10月5日</div>
+                        <h3>凌逍科学会正式成立</h3>
+                        <p>第一届分设实践部、理论部</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023年12月5日</div>
+                        <h3>汕头科创大赛，粤东科创大赛</h3>
+                        <p>荣获二等奖、一等奖</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年5月1日</div>
+                        <h3>第一届社团节</h3>
+                        <p>作为凌逍科学会首秀，在这里我们展示各大项目成果，如电磁炮，机械臂，3D打印，机械蜘蛛，套圈游戏</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年3月10日</div>
+                        <h3>补充</h3>
+                        <p>待补充</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年3月10日</div>
+                        <h3>补充</h3>
+                        <p>待补充</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年3月10日</div>
+                        <h3>补充</h3>
+                        <p>待补充</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年3月10日</div>
+                        <h3>补充</h3>
+                        <p>待补充</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024年3月10日</div>
+                        <h3>补充</h3>
+                        <p>待补充</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Members Section -->
+    <section id="members">
+        <div class="container">
+            <div class="section-title">
+                <h2>核心成员</h2>
+            </div>
+            
+            <div class="department-title">社团骨干</div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="社长">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">社长</div>
+                        <p>计算机科学专业，专注人工智能研究，负责社团整体规划与对外合作。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="1"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="li_mingxuan" data-phone="138-0000-0001"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="副社长1">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">副社长</div>
+                        <p>生物工程专业，负责生物科技项目管理，擅长基因工程与生物信息学。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="2"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="zhang_yutong" data-phone="138-0000-0002"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="副社长2">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">副社长</div>
+                        <p>电子工程专业，主导机器人与自动化项目，拥有丰富的嵌入式开发经验。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="3"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="wang_haoran" data-phone="138-0000-0003"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="department-title">实践部</div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="实践部1">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">实践部部长</div>
+                        <p>机械工程专业，负责实验室设备维护与实验项目执行。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="4"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="chen_siyu" data-phone="138-0000-0004"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="实践部2">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">实践部副部长</div>
+                        <p>化学专业，擅长实验室操作与数据分析。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="5"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="liu_zihan" data-phone="138-0000-0005"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="实践部3">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">实践部副部长</div>
+                        <p>物理专业，负责实验设计与技术实现。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="6"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="zhao_tianyu" data-phone="138-0000-0006"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="department-title">理论部</div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="理论部1">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">理论部部长</div>
+                        <p>数学专业，负责算法设计与理论建模。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="7"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="sun_wenbo" data-phone="138-0000-0007"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="理论部2">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">理论部副部长</div>
+                        <p>统计学专业，专注于数据分析与预测模型。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="8"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="zhou_xiaotong" data-phone="138-0000-0008"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="理论部3">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">理论部副部长</div>
+                        <p>计算机科学专业，负责技术文档编写与知识整理。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="9"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="wu_zhiqiang" data-phone="138-0000-0009"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="department-title">设计部</div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="设计部1">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">设计部部长</div>
+                        <p>视觉传达专业，负责宣传物料设计与品牌形象维护。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="10"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="zheng_yawen" data-phone="138-0000-0010"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="设计部2">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">设计部副部长</div>
+                        <p>工业设计专业，负责产品外观设计与用户体验优化。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="11"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="huang_zihao" data-phone="138-0000-0011"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="设计部3">
+                    </div>
+                    <div class="member-info">
+                        <h3>补充</h3>
+                        <div class="member-role">设计部副部长</div>
+                        <p>新媒体专业，负责社团网站与社交媒体内容制作。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="12"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="lin_jiayi" data-phone="138-0000-0012"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="department-title">指导老师</div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="指导老师1">
+                    </div>
+                    <div class="member-info">
+                        <h3>苏翼辉</h3>
+                        <div class="member-role">指导老师</div>
+                        <p>计算机老师，为社团提供悉心指导，帮助学生解决技术问题。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="13"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="prof_zhang" data-phone="138-0000-0013"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="指导老师2">
+                    </div>
+                    <div class="member-info">
+                        <h3>赖晓聪</h3>
+                        <div class="member-role">指导老师</div>
+                        <p>生物工程学院副教授，专注于基因工程与生物信息学研究。</p>
+                        <div class="member-actions">
+                            <a href="#" class="action-btn member-detail-btn" data-member="14"><i class="fas fa-info-circle"></i></a>
+                            <a href="#" class="action-btn wechat-btn" data-wechat="dr_li" data-phone="138-0000-0014"><i class="fab fa-weixin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background: rgba(5, 5, 16, 0.7);">
+        <div class="container">
+            <div class="section-title">
+                <h2>联系我们</h2>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>欢迎加入科学的行列</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>地址</h4>
+                                <p>第二教学楼机房，图书馆302</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>邮箱</h4>
+                                <p>补充</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>电话</h4>
+                                <p>补充</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>办公时间</h4>
+                                <p>周一至周五 9:00 - 18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" class="form-control" placeholder="请输入您的姓名" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">联系方式</label>
+                            <input type="email" id="email" class="form-control" placeholder="请输入您的手机号码" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">消息</label>
+                            <textarea id="message" class="form-control" placeholder="请输入您的消息" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">报名</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>凌逍科学会</h3>
+                    <p>致力于激发学生对科学的兴趣，培养创新思维和实践能力，引领青年探索科技前沿。</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>快速导航</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#about">关于我们</a></li>
+                        <li><a href="#projects">项目展示</a></li>
+                        <li><a href="#schedule">课程安排</a></li>
+                        <li><a href="#events">活动日历</a></li>
+                        <li><a href="#members">核心成员</a></li>
+                        <li><a href="#contact">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>研究方向</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">3D软件学习与打印</a></li>
+                        <li><a href="#">编程语言学习</a></li>
+                        <li><a href="#">AI技术</a></li>
+                        <li><a href="#">PS设计</a></li>
+                        <li><a href="#">高等理论知识</a></li>
+                        <li><a href="#">团队协作</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>友情链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://www.stjzhwxx.net/" target="_blank">汕头金中海湾学校 </a></li>
+                        <li><a href="https://www.shantou.gov.cn/edu/" target="_blank">汕头市教育局</a></li>
+                        <li><a href="https://www.stjszx.net/" target="_blank">汕头市金山中学</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-logo">
+                <div class="logo-container">
+                    <div class="logo">
+                <div class="logo-badge">
+                    <img src="files/凌逍科学会社徽（现）.jpg" alt="凌逍科学会社徽">
+                </div>
+            </div>
+            <div class="logo-text-container"><div class="logo-text">凌逍科学会</div></div>
+            
+            
+            <div class="copyright">
+                <p>&copy; 2025 凌逍科学会  保留所有权利。 | 设计与开发：第一届实践部部长 陈烨寰</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Project Detail Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 id="modalProjectTitle">项目详情</h2>
+            <p id="modalProjectDescription">项目详细描述将在这里显示...</p>
+            <p><strong>技术栈：</strong><span id="modalProjectTech"></span></p>
+            <p><strong>项目周期：</strong><span id="modalProjectDuration"></span></p>
+            <p><strong>指导老师：</strong><span id="modalProjectMentor"></span></p>
+        </div>
+    </div>
+    
+    <!-- Member Detail Modal -->
+    <div class="modal" id="memberModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 id="modalMemberName">成员详情</h2>
+            <p><strong>职位：</strong><span id="modalMemberRole"></span></p>
+            <p><strong>专业：</strong><span id="modalMemberMajor"></span></p>
+            <p><strong>研究方向：</strong><span id="modalMemberResearch"></span></p>
+            <p id="modalMemberBio">成员详细介绍将在这里显示...</p>
+            <p><strong>联系方式：</strong><span id="modalMemberContact"></span></p>
+        </div>
+    </div>
+    
+    <!-- WeChat Modal -->
+    <div class="modal" id="wechatModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>添加微信</h2>
+            <p>请扫描下方二维码添加微信：</p>
+            <div class="qr-code">
+                <img id="wechatQRCode" src="https://via.placeholder.com/200x200?text=WeChat+QR" alt="微信二维码">
+            </div>
+            <p>微信号：<span id="wechatID"></span></p>
+            <p>联系电话：<span id="contactPhone"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('show');
+        });
+        
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                document.querySelector('nav ul').classList.remove('show');
+            });
+        });
+        
+        // Active Navigation Highlight
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('感谢您的消息！我们会尽快回复您。');
+            this.reset();
+        });
+        
+        // Project Detail Modal
+        const projectDetailButtons = document.querySelectorAll('.project-detail-btn');
+        const projectModal = document.getElementById('projectModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        
+        const projectData = {
+            1: {
+                title: "基于ARDUINO手势控制的水下清洁作业机械臂",
+                description: "作为一款新型防水机械臂，能够应用于水域垃圾清理工作。操作者可以穿戴装载有弯曲度传感器、加速度传感器等元件的手套实现对机械臂的手势控制，通过手臂转动、上下移动等控制机械臂的水下移动，通过手指弯曲实现末端执行器的开合，并能够使用内窥镜在电脑显示画面中有效观察水中状况，从而实现对水下垃圾的清理。",
+                tech: "Arduino, C++, 3D打印, 传感器",
+                duration: "2024年3月 - 2024年10月",
+                mentor: "第一届陈烨寰，第一届张贵杰，第二届周瑛梓"
+            },
+            2: {
+                title: "自行补充",
+                description: "服务型机器人平台旨在为酒店、医院等场景提供智能化服务解决方案。机器人具备自主导航、语音交互、物体识别等功能，能够完成物品递送、引导服务、信息查询等任务。项目采用ROS系统作为开发框架，实现了多传感器融合与人机交互。",
+                tech: "ROS, Python, C++, SLAM, NLP",
+                duration: "2023年1月 - 2023年12月",
+                mentor: "李博士"
+            },
+            3: {
+                title: "自行补充",
+                description: "本项目研发了一种基于CRISPR-Cas9技术的新型基因编辑工具，具有更高的精确性和安全性。通过优化引导RNA设计和Cas蛋白结构，实现了对目标基因的精准编辑，减少了脱靶效应。研究成果已申请国家发明专利一项。",
+                tech: "CRISPR-Cas9, Bioinformatics, Molecular Biology",
+                duration: "2022年9月 - 2023年11月",
+                mentor: "王研究员"
+            }
+        };
+        
+        projectDetailButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const projectId = this.getAttribute('data-project');
+                const project = projectData[projectId];
+                
+                document.getElementById('modalProjectTitle').textContent = project.title;
+                document.getElementById('modalProjectDescription').textContent = project.description;
+                document.getElementById('modalProjectTech').textContent = project.tech;
+                document.getElementById('modalProjectDuration').textContent = project.duration;
+                document.getElementById('modalProjectMentor').textContent = project.mentor;
+                
+                projectModal.style.display = 'flex';
+            });
+        });
+        
+        // Member Detail Modal
+        const memberDetailButtons = document.querySelectorAll('.member-detail-btn');
+        const memberModal = document.getElementById('memberModal');
+        
+        const memberData = {
+            1: {
+                name: "李明轩",
+                role: "社长",
+                major: "计算机科学与技术",
+                research: "人工智能、机器学习",
+                bio: "凌逍科学会创始人之一，拥有丰富的项目管理经验。曾获得全国大学生计算机设计大赛一等奖，参与国家级大学生创新创业项目2项。擅长团队协作与技术创新。",
+                contact: "limingxuan@university.edu"
+            },
+            2: {
+                name: "张雨桐",
+                role: "副社长",
+                major: "生物工程",
+                research: "基因工程、生物信息学",
+                bio: "专注于生物技术研发，在基因编辑领域有深入研究。曾发表SCI论文1篇，参与省级科研项目1项。具备扎实的实验技能和数据分析能力。",
+                contact: "zhangyutong@university.edu"
+            },
+            3: {
+                name: "王浩然",
+                role: "副社长",
+                major: "电子工程",
+                research: "机器人技术、自动化控制",
+                bio: "机器人技术专家，主导多项智能硬件项目开发。在国家级电子设计竞赛中获得二等奖，拥有3项实用新型专利。精通嵌入式系统开发。",
+                contact: "wanghaoran@university.edu"
+            },
+            4: {
+                name: "陈思雨",
+                role: "实践部成员",
+                major: "机械工程",
+                research: "机械设计、实验技术",
+                bio: "实践部核心成员，负责实验室设备维护与实验项目执行。具有丰富的实验操作经验，能够熟练使用各种精密仪器设备。",
+                contact: "chensiyu@university.edu"
+            },
+            5: {
+                name: "刘子涵",
+                role: "实践部成员",
+                major: "应用化学",
+                research: "化学分析、材料合成",
+                bio: "化学实验专家，擅长实验室操作与数据分析。在材料合成与表征方面有深入研究，参与多项化学相关项目。",
+                contact: "liuzihan@university.edu"
+            },
+            6: {
+                name: "赵天宇",
+                role: "实践部成员",
+                major: "应用物理",
+                research: "物理实验、光学技术",
+                bio: "物理实验技术员，负责实验设计与技术实现。在光学测量与物理仿真方面有丰富经验。",
+                contact: "zhaotianyu@university.edu"
+            },
+            7: {
+                name: "孙文博",
+                role: "理论部成员",
+                major: "数学与应用数学",
+                research: "算法设计、数学建模",
+                bio: "理论部核心成员，专注于算法设计与理论建模。多次获得数学建模竞赛奖项，具备扎实的数学基础。",
+                contact: "sunwenbo@university.edu"
+            },
+            8: {
+                name: "周晓彤",
+                role: "理论部成员",
+                major: "统计学",
+                research: "数据分析、预测模型",
+                bio: "数据分析专家，专注于统计建模与预测算法研究。擅长使用R和Python进行数据处理与可视化。",
+                contact: "zhouxiaotong@university.edu"
+            },
+            9: {
+                name: "吴志强",
+                role: "理论部成员",
+                major: "计算机科学",
+                research: "技术文档、知识管理",
+                bio: "技术文档编写专家，负责项目技术文档整理与知识管理。具备优秀的文字表达与逻辑思维能力。",
+                contact: "wuzhiqiang@university.edu"
+            },
+            10: {
+                name: "郑雅文",
+                role: "设计部成员",
+                major: "视觉传达设计",
+                research: "平面设计、品牌形象",
+                bio: "视觉设计师，负责社团宣传物料设计与品牌形象维护。具有丰富的设计经验与创意能力。",
+                contact: "zhengyawen@university.edu"
+            },
+            11: {
+                name: "黄子豪",
+                role: "设计部成员",
+                major: "工业设计",
+                research: "产品设计、用户体验",
+                bio: "产品设计师，专注于产品外观设计与用户体验优化。具备扎实的设计功底与创新思维。",
+                contact: "huangzihao@university.edu"
+            },
+            12: {
+                name: "林佳怡",
+                role: "设计部成员",
+                major: "新媒体艺术",
+                research: "数字媒体、内容创作",
+                bio: "新媒体内容创作者，负责社团网站与社交媒体内容制作。擅长视频制作与数字营销。",
+                contact: "linjiayi@university.edu"
+            },
+            13: {
+                name: "张教授",
+                role: "指导老师",
+                major: "计算机科学与技术",
+                research: "人工智能、机器学习",
+                bio: "计算机科学与技术学院教授，博士生导师。主要从事机器学习、数据挖掘等领域的研究工作，发表高水平学术论文50余篇，主持国家自然科学基金项目3项。",
+                contact: "zhang@university.edu"
+            },
+            14: {
+                name: "李博士",
+                role: "指导老师",
+                major: "生物工程",
+                research: "基因工程、生物信息学",
+                bio: "生物工程学院副教授，硕士生导师。专注于基因编辑技术研究，特别是在CRISPR-Cas9系统的优化与应用方面有深入研究。指导多项国家级大学生创新创业项目。",
+                contact: "li@university.edu"
+            }
+        };
+        
+        memberDetailButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const memberId = this.getAttribute('data-member');
+                const member = memberData[memberId];
+                
+                document.getElementById('modalMemberName').textContent = member.name;
+                document.getElementById('modalMemberRole').textContent = member.role;
+                document.getElementById('modalMemberMajor').textContent = member.major;
+                document.getElementById('modalMemberResearch').textContent = member.research;
+                document.getElementById('modalMemberBio').textContent = member.bio;
+                document.getElementById('modalMemberContact').textContent = member.contact;
+                
+                memberModal.style.display = 'flex';
+            });
+        });
+        
+        // WeChat Modal
+        const wechatButtons = document.querySelectorAll('.wechat-btn');
+        const wechatModal = document.getElementById('wechatModal');
+        
+        const wechatData = {
+            "li_mingxuan": "li_mingxuan_qr",
+            "zhang_yutong": "zhang_yutong_qr",
+            "wang_haoran": "wang_haoran_qr",
+            "chen_siyu": "chen_siyu_qr",
+            "liu_zihan": "liu_zihan_qr",
+            "zhao_tianyu": "zhao_tianyu_qr",
+            "sun_wenbo": "sun_wenbo_qr",
+            "zhou_xiaotong": "zhou_xiaotong_qr",
+            "wu_zhiqiang": "wu_zhiqiang_qr",
+            "zheng_yawen": "zheng_yawen_qr",
+            "huang_zihao": "huang_zihao_qr",
+            "lin_jiayi": "lin_jiayi_qr",
+            "prof_zhang": "prof_zhang_qr",
+            "dr_li": "dr_li_qr"
+        };
+        
+        wechatButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const wechatId = this.getAttribute('data-wechat');
+                const phone = this.getAttribute('data-phone');
+                
+                document.getElementById('wechatID').textContent = wechatId;
+                document.getElementById('contactPhone').textContent = phone;
+                // 在实际应用中，这里应该设置对应用户的二维码
+                document.getElementById('wechatQRCode').src = "https://via.placeholder.com/200x200?text=" + wechatId;
+                
+                wechatModal.style.display = 'flex';
+            });
+        });
+        
+        // Close Modals
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                projectModal.style.display = 'none';
+                memberModal.style.display = 'none';
+                wechatModal.style.display = 'none';
+            });
+        });
+        
+        // Close Modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === projectModal) {
+                projectModal.style.display = 'none';
+            }
+            if (e.target === memberModal) {
+                memberModal.style.display = 'none';
+            }
+            if (e.target === wechatModal) {
+                wechatModal.style.display = 'none';
+            }
+        });
+        
+        // Schedule Tabs
+        const scheduleTabs = document.querySelectorAll('.schedule-tab');
+        const scheduleContents = document.querySelectorAll('.schedule-content');
+        
+        scheduleTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                scheduleTabs.forEach(t => t.classList.remove('active'));
+                scheduleContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
