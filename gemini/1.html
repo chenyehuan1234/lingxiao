@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凌逍科学会 | Lingxiao Science Club</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Markdown Parser (Marked.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* --- 全局配置 --- */
+        :root {
+            --font-main: 'Noto Sans SC', sans-serif;
+            --color-primary: #4f46e5;
+            --color-secondary: #0ea5e9;
+        }
+        body {
+            font-family: var(--font-main);
+            background-color: #FAFAF9;
+            color: #1C1917;
+            overflow-x: hidden; /* 防止动画溢出 */
+        }
+
+        /* --- 滚动条优化 --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #a5b4fc, #6366f1); border-radius: 3px; }
+
+        /* --- 动画工具类 --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in-section.is-visible { opacity: 1; transform: none; }
+
+        /* 渐变文字 */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+        
+        /* 成员卡片光效 */
+        .member-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .member-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -5px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .member-avatar-glow {
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .member-card:hover .member-avatar-glow { opacity: 0.6; }
+
+        /* AI 悬浮球动画 */
+        @keyframes float-pulse {
+            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4); }
+            50% { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 40px rgba(79, 70, 229, 0.6); }
+        }
+        .ai-fab { animation: float-pulse 4s ease-in-out infinite; }
+
+        /* 图表容器 */
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: auto; height: 300px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        
+        /* 时间轴 */
+        .timeline-line::before {
+            content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+            background: linear-gradient(to bottom, transparent, #cbd5e1 10%, #cbd5e1 90%, transparent);
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- 导航栏 -->
+    <header class="fixed w-full z-50 bg-white/80 backdrop-blur-lg border-b border-stone-100 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)" id="nav-logo-container"></div>
+            <nav class="hidden md:flex items-center gap-8" id="nav-links-desktop"></nav>
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-stone-600 hover:bg-stone-100 rounded-lg"><span class="text-xl">☰</span></button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-b border-stone-200 px-4 py-4 space-y-3 shadow-lg"></div>
+    </header>
+
+    <!-- 1. 首屏 (Hero) -->
+    <section id="home" class="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
+        <!-- 背景装饰 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-blue-50/50 via-indigo-50/30 to-white -z-10"></div>
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-100/20 to-transparent -z-10 blur-3xl"></div>
+        
+        <div class="container mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-12 items-center" id="hero-content">
+            <!-- JS Injection -->
+        </div>
+    </section>
+
+    <!-- 2. 关于我们 (About) -->
+    <section id="about" class="py-24 relative">
+        <!-- 渐变过渡：上接 Hero 白色，下接 Projects 深色 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-white via-stone-50 to-stone-200/50 -z-10"></div>
+        
+        <div class="container mx-auto px-4 md:px-6" id="about-content">
+            <!-- JS Injection -->
+        </div>
+        
+        <!-- 底部渐变遮罩，平滑过渡到黑色 -->
+        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-stone-900 pointer-events-none"></div>
+    </section>
+
+    <!-- 3. 项目展示 (Projects) - 深色主题 -->
+    <section id="projects" class="py-24 bg-stone-900 text-stone-100 relative overflow-hidden">
+        <!-- 顶部光效，承接上一部分的过渡 -->
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-indigo-900/30 via-stone-900/0 to-transparent pointer-events-none"></div>
+        
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 fade-in-section">
+                <div class="max-w-xl" id="projects-header"></div>
+                <div class="flex flex-wrap gap-2 mt-6 md:mt-0" id="project-filters"></div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid"></div>
+        </div>
+        
+        <!-- 底部渐变，过渡回浅色 -->
+        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-stone-50 pointer-events-none"></div>
+    </section>
+
+    <!-- 4. 课程安排 (Schedule) - 多彩设计 -->
+    <section id="schedule" class="py-24 bg-stone-50 relative">
+        <!-- 背景氛围色，随 Tab 切换而变（通过 JS 控制父级 class） -->
+        <div id="schedule-bg-glow" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-blue-200/20 blur-[100px] rounded-full transition-colors duration-700 pointer-events-none"></div>
+
+        <div class="container mx-auto px-4 md:px-6 max-w-6xl relative z-10">
+            <div class="text-center mb-16 fade-in-section" id="schedule-header"></div>
+            <!-- 主容器：采用玻璃拟态+动态边框 -->
+            <div class="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 overflow-hidden flex flex-col md:flex-row min-h-[500px] fade-in-section transition-colors duration-500" id="schedule-container">
+                <!-- JS Injection -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 活动日历 (Events) -->
+    <section id="events" class="py-24 bg-white relative border-t border-stone-100">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNlN2U1ZTQiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]"></div>
+        <div class="container mx-auto px-4 md:px-6 max-w-4xl relative z-10">
+            <div class="text-center mb-20 fade-in-section" id="events-header"></div>
+            <div class="relative timeline-line space-y-16" id="timeline-container"></div>
+        </div>
+    </section>
+
+    <!-- 6. 核心成员 (Members) - 炫酷设计 -->
+    <section id="members" class="py-24 relative overflow-hidden bg-stone-50">
+        <!-- 动态 Mesh Gradient 背景 -->
+        <div class="absolute top-0 -left-40 w-96 h-96 bg-purple-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div class="absolute top-0 -right-40 w-96 h-96 bg-yellow-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-40 left-20 w-96 h-96 bg-pink-300/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-20 fade-in-section" id="members-header"></div>
+            
+            <!-- 现任成员 Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-20" id="members-current"></div>
+
+            <!-- 往届 Tag Cloud -->
+            <div class="text-center fade-in-section">
+                <h3 class="text-lg font-bold text-stone-500 uppercase tracking-widest mb-8">Honorary Alumni</h3>
+                <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto" id="members-past"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 周边 (Shop) -->
+    <section id="zhoubian" class="py-24 bg-white relative">
+        <div class="container mx-auto px-4 md:px-6">
+             <div class="text-center mb-16 fade-in-section" id="shop-header"></div>
+            <div class="bg-gradient-to-br from-stone-50 to-white border border-stone-100 rounded-3xl p-8 lg:p-12 grid md:grid-cols-2 gap-12 items-center shadow-xl shadow-stone-200/40">
+                <div class="relative h-[400px] bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex items-center justify-center p-8 group">
+                     <div class="absolute inset-0 bg-gradient-to-tr from-stone-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                     <img id="shop-main-img" src="" alt="周边展示" class="max-h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105">
+                </div>
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-3xl font-bold text-stone-800 mb-2">精选文创周边</h3>
+                        <p class="text-stone-500">将凌逍的记忆带回家，每一件都充满设计巧思。</p>
+                    </div>
+                    <div class="space-y-4" id="shop-list"></div>
+                    <button onclick="openModal('shop-modal')" class="w-full mt-6 py-4 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1">
+                        <span>🛍️ 立即购买</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. 联系我们 & 页脚 -->
+    <section id="contact" class="py-24 bg-stone-950 text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent opacity-5 pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20" id="contact-content">
+                <!-- JS Injection -->
+            </div>
+        </div>
+        
+        <footer class="mt-20 border-t border-white/10 pt-10 text-stone-400 text-sm text-center" id="footer">
+            <!-- JS Injection -->
+        </footer>
+    </section>
+
+    <!-- 悬浮按钮 -->
+    <button onclick="openAiModal()" class="ai-fab fixed bottom-8 right-8 z-50 w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-3xl shadow-2xl hover:scale-110 transition-transform cursor-pointer group text-white border-2 border-white/20" title="打开 DeepSeek 创意实验室">
+        <span class="transform group-hover:rotate-12 transition-transform">🤖</span>
+    </button>
+
+    <!-- 模态框容器 -->
+    <div id="modal-overlay" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div id="modal-content" class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300"></div>
+    </div>
+
+    <!-- AI Modal Template -->
+    <template id="ai-modal-template">
+        <div class="flex flex-col h-full max-h-[85vh]">
+            <div class="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-indigo-100 flex justify-between items-center rounded-t-2xl">
+                <div>
+                    <h3 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 flex items-center gap-2">
+                        🌌 DeepSeek 创意实验室
+                        <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200">R1 Model</span>
+                    </h3>
+                    <p class="text-sm text-indigo-600/80 mt-1">激发无限灵感，解答科学难题</p>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white text-indigo-400 hover:text-indigo-700 hover:bg-indigo-50 flex items-center justify-center transition-colors font-bold text-xl">&times;</button>
+            </div>
+            <div class="flex border-b border-stone-200">
+                <button onclick="switchAiTab('idea')" id="ai-tab-idea" class="flex-1 py-4 text-sm font-bold text-indigo-700 border-b-2 border-indigo-600 bg-indigo-50/50 transition-colors">💡 科创灵感</button>
+                <button onclick="switchAiTab('tutor')" id="ai-tab-tutor" class="flex-1 py-4 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">🎓 科学百科</button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 bg-white">
+                <div id="ai-view-idea" class="space-y-6">
+                    <p class="text-stone-600 text-sm">输入关键词，DeepSeek R1 将为你推理出完整的项目方案。</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-stone-500 uppercase">关键词</label>
+                            <input type="text" id="idea-topic" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none" placeholder="例如：水下机器人">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-stone-500 uppercase">难度</label>
+                            <select id="idea-level" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 outline-none">
+                                <option>入门 (Arduino基础)</option>
+                                <option>进阶 (传感器应用)</option>
+                                <option>挑战 (AI与视觉)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="generateProjectIdea()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">🚀 开始推理生成</button>
+                    <div id="idea-result" class="hidden mt-6 p-6 bg-stone-50 rounded-xl border border-stone-100 prose-ai text-stone-700 text-sm leading-relaxed"></div>
+                </div>
+                <div id="ai-view-tutor" class="hidden space-y-6">
+                     <p class="text-stone-600 text-sm">向 DeepSeek 提问任何科学或编程问题。</p>
+                    <textarea id="tutor-question" rows="3" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none" placeholder="例如：什么是PID控制？"></textarea>
+                    <button onclick="askScienceTutor()" class="w-full py-3 bg-stone-800 text-white font-bold rounded-xl hover:bg-stone-700 transition-colors">🎓 提交问题</button>
+                    <div id="tutor-result" class="hidden mt-6 p-6 bg-indigo-50/50 rounded-xl border border-indigo-100 prose-ai text-stone-700 text-sm leading-relaxed"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // ⚠️ 请在此处填入 DeepSeek API Key
+        const DEEPSEEK_API_KEY = "sk-f9468c45ff9246678bd453f78d07dcd0"; 
+
+        const CONFIG = {
+            siteName: "凌逍科学会",
+            navLinks: [
+                { id: "home", text: "首页" },
+                { id: "about", text: "关于" },
+                { id: "projects", text: "项目" },
+                { id: "schedule", text: "课程" },
+                { id: "events", text: "足迹" },
+                { id: "members", text: "成员" },
+                { id: "zhoubian", text: "周边" }
+            ],
+            hero: {
+                est: "EST. 2023 · SHANTOU",
+                title: "探索无限科学可能",
+                desc: "致力于激发学生对科学的兴趣，培养创新思维和实践能力。引领青年探索科技前沿，点燃求知火花。",
+                btnPrimary: "探索项目",
+                btnSecondary: "加入我们",
+                img: "https://placehold.co/800x600/e0e7ff/1e1b4b?text=LX+Hero+Visual"
+            },
+            about: {
+                title: "关于我们",
+                quote: "思辨尚奥，求索务高——因为我们归宿在凌逍。",
+                subTitle: "用代码与电路构建未来",
+                desc: "凌逍科学会成立于2023年，是金中海湾学校极具影响力的科创数理类社团。我们以下设的实践部、理论部和设计部为三大支柱，涵盖人工智能、物联网、3D建模等前沿领域。",
+                stats: [
+                    { val: "30+", label: "活跃成员" },
+                    { val: "20+", label: "项目产出" },
+                    { val: "30+", label: "竞赛奖项" }
+                ],
+                chartData: [30, 20, 30],
+                photo: "https://placehold.co/800x500/cbd5e1/1e293b?text=Team+Group+Photo"
+            },
+            projects: [
+                {
+                    id: 1, title: "水下清洁机械臂", cat: "practice", tags: ["实践部", "Arduino"],
+                    img: "https://placehold.co/600x400/0ea5e9/ffffff?text=Robot+Arm",
+                    desc: "基于手势控制的新型防水机械臂，获市级二等奖。",
+                    detail: "通过Arduino结合MPU6050手势识别，实现水下垃圾清理。"
+                },
+                {
+                    id: 2, title: "智慧办公室系统", cat: "practice", tags: ["实践部", "IoT"],
+                    img: "https://placehold.co/600x400/3b82f6/ffffff?text=Smart+Office",
+                    desc: "自动调节灯光与环境监测，节能环保。",
+                    detail: "集成DHT11温湿度与红外感应，大幅降低能耗。"
+                },
+                {
+                    id: 3, title: "道家文化VI设计", cat: "design", tags: ["设计部", "视觉设计"],
+                    img: "https://placehold.co/600x400/f97316/ffffff?text=Taoism+VI",
+                    desc: "传统文化与现代极简设计的完美碰撞。",
+                    detail: "基于太极八卦元素的现代视觉识别系统，包含海报与周边。"
+                },
+                {
+                    id: 4, title: "交通网络模拟", cat: "theory", tags: ["理论部", "算法"],
+                    img: "https://placehold.co/600x400/8b5cf6/ffffff?text=Monte+Carlo",
+                    desc: "蒙特卡洛算法优化大型演唱会疏散方案。",
+                    detail: "数学建模解决实际拥堵问题，提供最优路径规划。"
+                },
+                {
+                    id: 5, title: "AIGC 嵌瓷艺术", cat: "design", tags: ["设计部", "AI绘画"],
+                    img: "https://placehold.co/600x400/ec4899/ffffff?text=AIGC+Art",
+                    desc: "非遗文化的数字化新生与传承。",
+                    detail: "训练LoRA模型复现潮汕嵌瓷风格，探索艺术与科技边界。"
+                },
+                {
+                    id: 6, title: "智慧物联农业", cat: "practice", tags: ["实践部", "AIoT"],
+                    img: "https://placehold.co/600x400/22c55e/ffffff?text=Smart+Farm",
+                    desc: "计算机视觉辅助的精准滴灌系统。",
+                    detail: "应用在干旱地区，最大化水资源利用率。"
+                }
+            ],
+            schedule: {
+                practice: {
+                    title: "实践部 · 硬件工坊", 
+                    theme: "blue", // 颜色主题：blue/purple/orange
+                    bg: "bg-blue-50", text: "text-blue-900", accent: "text-blue-600", border: "border-blue-100",
+                    loc: "图书馆 302",
+                    courses: [
+                        { idx: "01", name: "Arduino 创客基础", desc: "开源硬件生态与电路原理" },
+                        { idx: "02", name: "传感器综合应用", desc: "数据采集与智能控制" },
+                        { idx: "03", name: "项目开发实战", desc: "团队协作完成完整作品" },
+                        { idx: "04", name: "Python 嵌入式", desc: "行空板与高级编程" }
+                    ],
+                    hours: ["第一学期 10 课时", "第二学期 15 课时"]
+                },
+                theory: {
+                    title: "理论部 · 数理研讨", 
+                    theme: "purple",
+                    bg: "bg-purple-50", text: "text-purple-900", accent: "text-purple-600", border: "border-purple-100",
+                    loc: "图书馆 302",
+                    courses: [
+                        { idx: "01", name: "高等数学入门", desc: "微积分基础与极限思维" },
+                        { idx: "02", name: "数学二级结论", desc: "竞赛常用技巧与推导" },
+                        { idx: "03", name: "趣味科学实验", desc: "物理化学现象深度解析" },
+                        { idx: "04", name: "高阶逻辑数独", desc: "思维训练与解题策略" }
+                    ],
+                    hours: ["第一学期 12 课时", "第二学期 12 课时"]
+                },
+                design: {
+                    title: "设计部 · 创意视觉", 
+                    theme: "orange",
+                    bg: "bg-orange-50", text: "text-orange-900", accent: "text-orange-600", border: "border-orange-100",
+                    loc: "第二教学楼机房",
+                    courses: [
+                        { idx: "01", name: "平面设计 (PS)", desc: "海报绘制与视觉传达" },
+                        { idx: "02", name: "3D 建模基础", desc: "123D Design 实体建模" },
+                        { idx: "03", name: "AIGC 辅助设计", desc: "AI 工具流应用" }
+                    ],
+                    hours: ["第一学期 10-12 课时", "第二学期 9 课时"]
+                }
+            },
+            events: [
+                { date: "2023.10", title: "凌逍科学会成立", type: "milestone" },
+                { date: "2023.12", title: "科创大赛佳绩", desc: "市二等奖、粤东一等奖", type: "award" },
+                { date: "2024.05", title: "首届社团节", desc: "电磁炮硬核展演", type: "event" },
+                { date: "2024.10", title: "院士进校园", desc: "与顶尖科学家面对面", type: "event" },
+                { date: "2024.11", title: "STEAM 论坛", desc: "荣获特等奖", type: "award" },
+                { date: "2025.05", title: "省科创大赛", desc: "获省级二等奖2项", type: "award" }
+            ],
+            members: {
+                current: [
+                    { name: "姚俊熙", role: "社长", class: "高二六班", color: "from-blue-500 to-cyan-500" },
+                    { name: "郑永锋", role: "副社长", color: "from-blue-400 to-indigo-500" },
+                    { name: "蔡泽妍", role: "实践部部长", color: "from-sky-400 to-blue-600" },
+                    { name: "陈泽纯", role: "实践部副部", color: "from-sky-300 to-blue-500" },
+                    { name: "吕伟滨", role: "理论部部长", color: "from-violet-500 to-purple-600" },
+                    { name: "王丽雯", role: "设计部部长", color: "from-orange-400 to-pink-500" },
+                    { name: "辛炎書", role: "设计部副部", color: "from-orange-300 to-pink-400" },
+                    { name: "苏煜辉", role: "指导老师", isTeacher: true, color: "from-stone-600 to-stone-800" }
+                ],
+                past: ["林奕君", "陈庆", "刘梓杭", "汤梵俪", "陈烨寰", "张贵杰", "薛垲越", "沈宇翔", "林笔蓝", "陈孜铄", "余滟镁", "林佳宁", "杨振杰", "陈梓帆", "林越", "文孟涛", "方燕玲"]
+            },
+            shop: [
+                { id: 1, name: "3D打印模型", price: "￥6.00", img: "https://placehold.co/600x600/f5f5f4/1c1917?text=3D+Model" },
+                { id: 2, name: "定制明信片 A", price: "￥2.00", img: "https://placehold.co/600x600/fee2e2/991b1b?text=Postcard+1" },
+                { id: 3, name: "定制明信片 B", price: "￥2.00", img: "https://placehold.co/600x600/fef3c7/92400e?text=Postcard+2" },
+                { id: 4, name: "凌逍专属书签", price: "￥1.50", img: "https://placehold.co/600x600/e0e7ff/3730a3?text=Bookmark" }
+            ],
+            contact: {
+                loc: "第二教学楼机房，图书馆302",
+                time: "周一至周五 13:00-14:00, 17:00-18:00"
+            }
+        };
+
+        // --- 渲染逻辑 ---
+
+        function renderNav() {
+            document.getElementById('nav-logo-container').innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 p-[2px] shadow-lg">
+                    <div class="w-full h-full rounded-full bg-white flex items-center justify-center text-[10px] font-black text-stone-800 tracking-tighter">LOGO</div>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-stone-900">${CONFIG.siteName}</span>
+            `;
+            const desktopNav = document.getElementById('nav-links-desktop');
+            const mobileNav = document.getElementById('mobile-menu');
+            CONFIG.navLinks.forEach(link => {
+                desktopNav.innerHTML += `<a href="#${link.id}" class="text-sm font-medium text-stone-600 hover:text-blue-600 transition-colors relative group">${link.text}<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span></a>`;
+                mobileNav.innerHTML += `<a href="#${link.id}" class="block px-2 py-1 text-stone-700 hover:bg-stone-50 rounded">${link.text}</a>`;
+            });
+            desktopNav.innerHTML += `<a href="#contact" class="px-5 py-2 text-sm font-bold text-white bg-stone-900 rounded-full hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-200">联系我们</a>`;
+        }
+
+        function renderHero() {
+            const h = CONFIG.hero;
+            document.getElementById('hero-content').innerHTML = `
+                <div class="space-y-8 fade-in-section relative z-10">
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm text-blue-800 text-xs font-bold tracking-wide uppercase">${h.est}</div>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.1] tracking-tight">
+                        探索无限<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">科学可能</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-stone-600 max-w-lg leading-relaxed">${h.desc}</p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#projects" class="px-8 py-4 rounded-full bg-stone-900 text-white font-bold hover:bg-blue-600 hover:scale-105 transition-all shadow-xl shadow-stone-200">${h.btnPrimary}</a>
+                        <a href="#contact" class="px-8 py-4 rounded-full bg-white text-stone-900 border border-stone-200 font-bold hover:bg-stone-50 hover:border-stone-300 transition-all">${h.btnSecondary}</a>
+                    </div>
+                </div>
+                <div class="relative fade-in-section delay-100 group perspective-1000">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-[2rem] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div class="aspect-[4/3] rounded-[2rem] bg-stone-200 overflow-hidden shadow-2xl relative transform transition-transform duration-700 group-hover:rotate-y-2 group-hover:rotate-x-2">
+                        <img src="${h.img}" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAbout() {
+            const a = CONFIG.about;
+            document.getElementById('about-content').innerHTML = `
+                <div class="text-center max-w-3xl mx-auto mb-20 fade-in-section">
+                    <h2 class="text-4xl font-bold text-stone-900 mb-6">${a.title}</h2>
+                    <p class="text-xl text-stone-500 font-serif italic">"${a.quote}"</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-10 fade-in-section">
+                        <div>
+                            <h3 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">${a.subTitle}</h3>
+                            <p class="text-lg text-stone-600 leading-relaxed">${a.desc}</p>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            ${a.stats.map(s => `
+                                <div class="p-5 bg-white rounded-2xl text-center border border-stone-100 shadow-lg shadow-stone-100 hover:-translate-y-1 transition-transform">
+                                    <div class="text-3xl font-black text-stone-900 mb-1">${s.val}</div>
+                                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider">${s.label}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="space-y-8 fade-in-section">
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                            <img src="${a.photo}" class="w-full h-auto">
+                            <div class="absolute inset-0 bg-gradient-to-t from-stone-900/50 to-transparent"></div>
+                        </div>
+                        <div class="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-xl border border-stone-100">
+                             <div class="chart-container"><canvas id="impactChart"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProjects(filter = 'all') {
+            document.getElementById('projects-header').innerHTML = `
+                <h2 class="text-4xl font-bold mb-4 text-white">项目展示</h2>
+                <p class="text-stone-400 text-lg">跨越多个学科的创新实践成果。</p>
+            `;
+            
+            const filters = ['all', 'practice', 'theory', 'design'];
+            const filterContainer = document.getElementById('project-filters');
+            filterContainer.innerHTML = '';
+            filters.forEach(f => {
+                const label = f === 'all' ? '全部' : (f === 'practice' ? '实践部' : (f === 'theory' ? '理论部' : '设计部'));
+                const isActive = f === filter;
+                const btn = document.createElement('button');
+                btn.className = isActive 
+                    ? "px-5 py-2.5 rounded-full text-sm font-bold bg-white text-stone-900 shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
+                    : "px-5 py-2.5 rounded-full text-sm font-bold bg-stone-800 text-stone-400 hover:bg-stone-700 hover:text-white transition-all";
+                btn.innerText = label;
+                btn.onclick = () => renderProjects(f);
+                filterContainer.appendChild(btn);
+            });
+
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? CONFIG.projects : CONFIG.projects.filter(p => p.cat === filter);
+            
+            filtered.forEach((p, idx) => {
+                grid.innerHTML += `
+                    <div class="group bg-stone-800 rounded-2xl overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] transition-all duration-500 hover:-translate-y-2 border border-stone-700/50 fade-in-section relative" style="animation-delay: ${idx * 50}ms">
+                        <div class="relative h-56 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-stone-900 to-transparent opacity-60 z-10"></div>
+                            <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute top-3 left-3 flex gap-2 z-20">
+                                ${p.tags.map(t => `<span class="px-2 py-1 text-[10px] font-bold bg-white/10 text-white backdrop-blur-md rounded border border-white/20 uppercase tracking-wide">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-colors">${p.title}</h3>
+                            <p class="text-stone-400 text-sm mb-6 line-clamp-2 leading-relaxed">${p.desc}</p>
+                            <button onclick="openProjectModal(${p.id})" class="w-full py-3 rounded-xl bg-stone-700/50 border border-stone-600 text-white text-sm font-bold hover:bg-white hover:text-stone-900 hover:border-white transition-all flex items-center justify-center gap-2 group-hover:shadow-lg">
+                                查看详情 <span class="text-xs">→</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            observeSections();
+        }
+
+        // --- 多彩课程表逻辑 ---
+        function renderSchedule() {
+            document.getElementById('schedule-header').innerHTML = `
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">课程安排</h2>
+                <p class="text-stone-500">分层教学体系，打造硬核技能树。</p>
+            `;
+
+            const depts = Object.keys(CONFIG.schedule);
+            let sidebarHTML = `<div class="w-full md:w-72 bg-white/50 border-b md:border-b-0 md:border-r border-stone-200/50 p-6 flex md:flex-col gap-3 overflow-x-auto md:overflow-visible backdrop-blur-sm">`;
+            
+            depts.forEach((d, idx) => {
+                const isActive = idx === 0;
+                const dept = CONFIG.schedule[d];
+                // 动态生成激活时的颜色类
+                const activeClasses = isActive 
+                    ? `bg-${dept.theme}-100/80 text-${dept.theme}-700 shadow-sm border-${dept.theme}-200` 
+                    : `bg-transparent text-stone-500 hover:bg-stone-100 border-transparent`;
+                
+                sidebarHTML += `
+                    <button id="tab-btn-${d}" class="tab-btn w-full text-left px-5 py-4 rounded-xl font-bold text-sm transition-all border ${activeClasses} flex items-center gap-3" onclick="switchScheduleTab('${d}')">
+                        <div class="w-2 h-2 rounded-full ${isActive ? `bg-${dept.theme}-500` : 'bg-stone-300'}"></div>
+                        ${dept.title}
+                    </button>
+                `;
+            });
+            sidebarHTML += `</div>`;
+
+            let contentHTML = `<div class="flex-1 p-8 md:p-12 min-h-[500px] relative">`;
+            depts.forEach((d, idx) => {
+                const dept = CONFIG.schedule[d];
+                const isHidden = idx !== 0 ? 'hidden' : '';
+                // 内容区域使用配置的颜色
+                contentHTML += `
+                    <div id="tab-content-${d}" class="tab-content ${isHidden} animate-fade space-y-8">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b ${dept.border} pb-6">
+                            <div>
+                                <h3 class="text-3xl font-bold ${dept.text}">${dept.title}</h3>
+                                <p class="text-stone-500 mt-2 text-sm">Location: ${dept.loc}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                ${dept.hours.map(h => `<span class="px-3 py-1.5 rounded-lg text-xs font-bold ${dept.bg} ${dept.accent} border ${dept.border}">${h}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            ${dept.courses.map(c => `
+                                <div class="p-5 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-${dept.theme}-200 transition-all group">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h4 class="font-bold text-stone-800 group-hover:${dept.accent} transition-colors">${c.name}</h4>
+                                        <span class="text-xs font-black text-stone-300 opacity-50">${c.idx}</span>
+                                    </div>
+                                    <p class="text-sm text-stone-500 leading-relaxed">${c.desc}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            contentHTML += `</div>`;
+
+            document.getElementById('schedule-container').innerHTML = sidebarHTML + contentHTML;
+        }
+
+        function switchScheduleTab(deptKey) {
+            const dept = CONFIG.schedule[deptKey];
+            
+            // 1. 背景光效切换
+            const glow = document.getElementById('schedule-bg-glow');
+            glow.className = `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] blur-[120px] rounded-full transition-colors duration-700 pointer-events-none bg-${dept.theme}-300/20`;
+
+            // 2. Tab 按钮样式
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-xl font-bold text-sm transition-all border bg-transparent text-stone-500 hover:bg-stone-100 border-transparent flex items-center gap-3`;
+                btn.querySelector('div').className = "w-2 h-2 rounded-full bg-stone-300";
+            });
+            const activeBtn = document.getElementById(`tab-btn-${deptKey}`);
+            activeBtn.className = `tab-btn w-full text-left px-5 py-4 rounded-xl font-bold text-sm transition-all border bg-${dept.theme}-100/80 text-${dept.theme}-700 shadow-sm border-${dept.theme}-200 flex items-center gap-3`;
+            activeBtn.querySelector('div').className = `w-2 h-2 rounded-full bg-${dept.theme}-500`;
+
+            // 3. 内容切换
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-content-${deptKey}`).classList.remove('hidden');
+        }
+
+        // --- 核心成员渲染 (炫酷版) ---
+        function renderMembers() {
+            document.getElementById('members-header').innerHTML = `
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">核心成员</h2>
+                <p class="text-stone-500">热爱科学，勇于探索的先锋团队。</p>
+            `;
+            
+            const currentGrid = document.getElementById('members-current');
+            CONFIG.members.current.forEach((m, idx) => {
+                currentGrid.innerHTML += `
+                    <div class="member-card relative rounded-2xl p-6 flex flex-col items-center text-center group fade-in-section overflow-hidden" style="animation-delay: ${idx * 50}ms">
+                        <div class="relative w-24 h-24 mb-6">
+                            <div class="member-avatar-glow"></div>
+                            <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-white shadow-lg bg-stone-200">
+                                <img src="https://placehold.co/150x150/cbd5e1/1e293b?text=${m.name.charAt(0)}" class="w-full h-full object-cover">
+                            </div>
+                            ${m.isTeacher ? '<div class="absolute -bottom-2 -right-2 bg-stone-800 text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-md">TEACHER</div>' : ''}
+                        </div>
+                        <h4 class="text-xl font-bold text-stone-900 mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${m.color}">${m.name}</h4>
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">${m.role}</span>
+                        ${m.class ? `<div class="mt-auto pt-4 border-t border-stone-100 w-full text-sm text-stone-500">${m.class}</div>` : ''}
+                        
+                        <!-- Hover Reveal Socials -->
+                        <div class="absolute inset-0 bg-white/90 backdrop-blur flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <h4 class="font-bold text-stone-900 mb-4">${m.name}</h4>
+                             <div class="flex gap-3">
+                                <button class="p-2 rounded-full bg-stone-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">💬</button>
+                                <button class="p-2 rounded-full bg-stone-100 hover:bg-green-50 hover:text-green-600 transition-colors">📱</button>
+                             </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const pastGrid = document.getElementById('members-past');
+            CONFIG.members.past.forEach(m => {
+                pastGrid.innerHTML += `
+                    <span class="px-4 py-2 bg-white rounded-full text-xs font-bold text-stone-500 border border-stone-200 shadow-sm hover:border-stone-400 hover:text-stone-800 hover:scale-105 transition-all cursor-default">
+                        ${m}
+                    </span>
+                `;
+            });
+        }
+
+        // --- 其他渲染函数 ---
+        function renderEvents() {
+            document.getElementById('events-header').innerHTML = `<h2 class="text-4xl font-bold text-stone-900 mb-4">成长足迹</h2>`;
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+            CONFIG.events.forEach((e, idx) => {
+                const isLeft = idx % 2 === 0;
+                const alignClass = isLeft ? 'md:pr-24 md:text-right md:items-end' : 'md:pl-24 md:ml-auto md:text-left md:items-start';
+                
+                container.innerHTML += `
+                    <div class="relative w-full md:w-1/2 ${alignClass} flex flex-col items-center text-center md:block fade-in-section">
+                        <!-- Dot -->
+                        <div class="absolute top-0 left-1/2 md:left-auto ${isLeft ? 'md:-right-2' : 'md:-left-2'} w-4 h-4 rounded-full bg-white border-4 border-indigo-500 z-10 transform -translate-x-1/2 md:translate-x-0 mt-1.5 shadow-[0_0_0_4px_rgba(255,255,255,0.5)]"></div>
+                        
+                        <div class="relative group">
+                            <span class="inline-block text-5xl font-black text-stone-100 absolute -top-8 ${isLeft ? 'right-0' : 'left-0'} -z-10 group-hover:text-indigo-50 transition-colors">${e.date.split('.')[0]}</span>
+                            <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-lg shadow-stone-100/50 hover:shadow-xl hover:-translate-y-1 transition-all inline-block w-full md:w-auto mt-6 md:mt-0">
+                                <span class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded mb-2 inline-block">${e.date}</span>
+                                <h4 class="text-lg font-bold text-stone-800">${e.title}</h4>
+                                ${e.desc ? `<p class="text-stone-500 text-sm mt-2">${e.desc}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderShop() {
+            document.getElementById('shop-header').innerHTML = `<h2 class="text-4xl font-bold text-stone-900 mb-4">社团周边</h2>`;
+            const list = document.getElementById('shop-list');
+            document.getElementById('shop-main-img').src = CONFIG.shop[0].img;
+            CONFIG.shop.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-4 rounded-xl bg-white border border-stone-100 hover:border-blue-200 hover:shadow-md cursor-pointer transition-all group";
+                row.onclick = () => document.getElementById('shop-main-img').src = item.img;
+                row.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-stone-100 overflow-hidden"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                        <span class="font-bold text-stone-700 group-hover:text-blue-600 transition-colors">${item.name}</span>
+                    </div>
+                    <span class="font-bold text-stone-900">${item.price}</span>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function renderContactAndFooter() {
+            document.getElementById('contact-content').innerHTML = `
+                <div class="space-y-10">
+                    <div>
+                        <h2 class="text-5xl font-bold mb-6">加入我们<br/><span class="text-stone-500">共创未来</span></h2>
+                        <p class="text-stone-400 text-lg leading-relaxed">无论是想要探索科技奥秘，还是寻找志同道合的伙伴，凌逍科学会都是你的最佳起点。</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-5">
+                            <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-2xl border border-white/10">📍</div>
+                            <div><h4 class="font-bold text-xl text-white">活动据点</h4><p class="text-stone-400 mt-1">${CONFIG.contact.loc}</p></div>
+                        </div>
+                        <div class="flex items-start gap-5">
+                            <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-2xl border border-white/10">⏰</div>
+                            <div><h4 class="font-bold text-xl text-white">相聚时刻</h4><p class="text-stone-400 mt-1">${CONFIG.contact.time}</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-[2rem] p-8 md:p-10 text-stone-900 shadow-2xl">
+                    <form onsubmit="alert('已收到！');return false;" class="space-y-5">
+                        <div class="grid grid-cols-2 gap-5">
+                            <input type="text" class="w-full px-5 py-4 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold" placeholder="你的名字" required>
+                            <input type="text" class="w-full px-5 py-4 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold" placeholder="联系方式" required>
+                        </div>
+                        <textarea rows="4" class="w-full px-5 py-4 rounded-xl bg-stone-50 border border-stone-200 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-bold" placeholder="写下你的想法..." required></textarea>
+                        <button type="submit" class="w-full py-4 bg-stone-900 text-white font-bold rounded-xl shadow-lg hover:bg-blue-600 hover:shadow-blue-500/30 hover:-translate-y-1 transition-all">发送消息</button>
+                    </form>
+                </div>
+            `;
+            document.getElementById('footer').innerHTML = `
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0">
+                            <h5 class="text-white font-bold text-lg mb-1">${CONFIG.siteName}</h5>
+                            <p class="opacity-50">© 2026 All rights reserved.</p>
+                        </div>
+                        <div class="flex gap-6">
+                            <a href="#" class="hover:text-white transition-colors">隐私政策</a>
+                            <a href="#" class="hover:text-white transition-colors">联系支持</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['成员', '项目', '奖项'],
+                    datasets: [{
+                        data: CONFIG.about.chartData,
+                        backgroundColor: ['#2563eb', '#7c3aed', '#f59e0b'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } } }
+            });
+        }
+
+        // --- DeepSeek API ---
+        async function callDeepSeek(prompt, outputId) {
+            const outputDiv = document.getElementById(outputId);
+            outputDiv.classList.remove('hidden');
+            outputDiv.innerHTML = '<div class="text-indigo-600 font-medium animate-pulse">DeepSeek R1 正在深度思考...</div>';
+
+            if (!DEEPSEEK_API_KEY) {
+                outputDiv.innerHTML = '<div class="text-red-500">❌ 请在代码顶部配置 DEEPSEEK_API_KEY</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch("https://api.deepseek.com/chat/completions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${DEEPSEEK_API_KEY}` },
+                    body: JSON.stringify({ model: "deepseek-chat", messages: [{ role: "system", content: "你是一个高中科创社团的专家导师。" }, { role: "user", content: prompt }] })
+                });
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                const data = await response.json();
+                outputDiv.innerHTML = marked.parse(data.choices[0].message.content);
+            } catch (err) {
+                console.error(err);
+                outputDiv.innerHTML = `<div class="text-red-500">API Error: ${err.message}</div>`;
+            }
+        }
+
+        function generateProjectIdea() {
+            const topic = document.getElementById('idea-topic').value;
+            const level = document.getElementById('idea-level').value;
+            if(!topic) return alert("请输入关键词");
+            callDeepSeek(`设计一个创意项目。关键词：${topic}，难度：${level}。输出Markdown格式：名称、简介、硬件清单、功能。`, 'idea-result');
+        }
+
+        function askScienceTutor() {
+            const q = document.getElementById('tutor-question').value;
+            if(!q) return alert("请输入问题");
+            callDeepSeek(`通俗解释：${q}`, 'tutor-result');
+        }
+
+        // 通用模态框逻辑
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        function openModal(type) {
+            modalOverlay.classList.remove('hidden');
+            setTimeout(() => { modalOverlay.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+            if(type === 'shop-modal') modalContent.innerHTML = `<div class="p-8 text-center"><h3 class="text-2xl font-bold mb-4">周边购买指南</h3><p class="text-stone-600 mb-6">请前往社团活动室（图书馆302）或在开放日摊位购买。</p><button onclick="closeModal()" class="px-6 py-2 bg-stone-100 font-bold rounded-lg hover:bg-stone-200">关闭</button></div>`;
+        }
+        function openProjectModal(id) {
+            const p = CONFIG.projects.find(x => x.id === id);
+            openModal();
+            modalContent.innerHTML = `
+                <div class="relative">
+                    <img src="${p.img}" class="w-full h-72 object-cover rounded-t-2xl">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70 backdrop-blur">✕</button>
+                    <div class="p-8">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full mb-4 inline-block border border-blue-100">${p.tags.join(' & ')}</span>
+                        <h2 class="text-3xl font-bold text-stone-900 mb-4">${p.title}</h2>
+                        <div class="prose text-stone-600 mb-8 leading-relaxed"><p>${p.detail}</p></div>
+                        <div class="flex gap-4">
+                            <button class="flex-1 py-3 bg-stone-900 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] transition-transform">下载项目文档</button>
+                            <button class="flex-1 py-3 border border-stone-200 text-stone-700 font-bold rounded-xl hover:bg-stone-50">观看演示视频</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        function closeModal() {
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => { modalOverlay.classList.add('hidden'); modalContent.innerHTML = ''; }, 300);
+        }
+        function openAiModal() { openModal(); modalContent.innerHTML = document.getElementById('ai-modal-template').innerHTML; }
+        function switchAiTab(t) {
+            ['idea', 'tutor'].forEach(x => {
+                document.getElementById(`ai-tab-${x}`).className = x===t ? "flex-1 py-4 text-sm font-bold text-indigo-700 border-b-2 border-indigo-600 bg-indigo-50/50 transition-colors" : "flex-1 py-4 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors";
+                document.getElementById(`ai-view-${x}`).className = x===t ? "space-y-6" : "hidden space-y-6";
+            });
+        }
+        function observeSections() {
+            const observer = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('is-visible') }), {threshold:0.1});
+            document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNav(); renderHero(); renderAbout(); renderProjects(); renderSchedule(); renderEvents(); renderMembers(); renderShop(); renderContactAndFooter(); initChart(); observeSections();
+            // 默认选中第一个 Tab
+            switchScheduleTab('practice');
+        });
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    </script>
+</body>
+</html>
